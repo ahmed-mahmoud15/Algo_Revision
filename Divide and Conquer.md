@@ -87,7 +87,7 @@ def select(A, p, r, i):
 ### Median of Medians
 Group of 3 --> T(n) = T(n / 3) + T(2n / 3) + n --> O(n log n)
 
-Group of 5 --> T(n) = T(n / 5) + T(7n / 10) + n --> O(n)
+Group of 5 --> T(n) = T(n / 5) + T(3n / 4) + n --> O(n)
 
 Group of 9 --> T(n) = T(n / 7) + T(5n / 7) + n --> O(n)
 
