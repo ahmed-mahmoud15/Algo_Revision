@@ -433,3 +433,24 @@ def int_mul(x, y):
     # ac * 10^(half * 2) + term * 10^half + bd
     return int(ac * (10 ** (half * 2)) + term * (10 ** half) + bd)
 ```
+
+# Linear Sorting
+## Stable Count Sort
+```python
+def count_sort(A):
+    k = max(A)
+    C = [0] * (k + 1)
+    B = [0] * (len(A) + 1)
+
+    for num in A:
+        C[num] += 1
+
+    for i in range(1, k + 1):
+        C[i] = C[i] + C[i - 1]
+
+    for j in range(len(A) - 1, -1, -1):
+        B[C[A[j]]] = A[j]
+        C[A[j]] -= 1
+
+    return B[1:] # dummy value at index 0
+```
