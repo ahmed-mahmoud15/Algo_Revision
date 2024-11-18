@@ -77,4 +77,18 @@ def knapsack01(w, v, n, W):
                 dp[i][j] = max(v[i - 1] + dp[i - 1][j - w[i - 1]], dp[i - 1][j])
     return dp[n][W]
 ```
+Construct Solution
+```python
+def item_selected(dp, w, n, W):
+    i = n
+    k = W
+    selected_items = []
 
+    while i > 0 and k > 0:
+        if dp[i][k] != dp[i - 1][k]:
+            selected_items.append(i)
+            k -= w[i]
+        i -= 1
+
+    return list(reversed(selected_items))
+```
