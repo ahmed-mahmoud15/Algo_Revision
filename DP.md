@@ -166,3 +166,38 @@ def reconstruct_lcs(str1, str2, memo):
             j -= 1
     return ''.join(reversed(lcs_result))
 ```
+
+# Rod Cutting
+
+Top Down Approach - Memoization
+```python
+prices = [1, 5, 8, 9, 10, 17, 17, 20]
+memo = [-1] * (len(prices) + 1)
+
+def rod_cutting(i):
+    if i == 0:
+        return 0
+
+    if memo[i] != -1:
+        return memo[i]
+
+    val = 0
+    for j in range(1, i + 1):
+        val = max(val, prices[j - 1] + rod_cutting(i - j))
+    memo[i] = val
+    return memo[i]
+```
+Bottom Up Approach - Tabulation
+```python
+def rod_cutting_bottom_up(prices):
+    n = len(prices)
+    dp = [0] * (n + 1)
+
+    for i in range(1, n + 1):
+        max_val = 0
+        for j in range(1, i + 1):
+            max_val = max(max_val, prices[j - 1] + dp[i - j])
+        dp[i] = max_val
+
+    return dp[n]
+```
