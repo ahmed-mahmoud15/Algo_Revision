@@ -92,3 +92,77 @@ def item_selected(dp, w, n, W):
 
     return list(reversed(selected_items))
 ```
+# Least Common Subsequence
+Recursion Approach
+```python
+def lcs(str1, str2):
+    if str1 == "" or str2 == "":
+        return 0
+
+    n = len(str1)
+    m = len(str2)
+
+    if str1[n - 1] == str2[m - 1]:
+        return 1 + lcs(str1[:n - 1], str2[:m - 1])
+    return max(
+        lcs(str1[:n - 1], str2[:m]),
+        lcs(str1[:n], str2[:m - 1])
+    )
+```
+Top Down Approach - Memoization
+```python
+n = len(str1)
+m = len(str2)
+
+memo = [[-1] * (m + 1) for _ in range(n + 1)]
+
+
+def lcs(str1, str2, i, j):
+    if i == 0 or j == 0:
+        return 0
+
+    if memo[i][j] != -1:
+        return memo[i][j]
+
+    if str1[i - 1] == str2[j - 1]:
+        memo[i][j] = 1 + lcs(str1, str2, i - 1, j - 1)
+    else:
+        memo[i][j] = max(
+            lcs(str1, str2, i - 1, j),
+            lcs(str1, str2, i, j - 1)
+        )
+    return memo[i][j]
+```
+Bottom Up Approach - Tabulation
+```python
+def lcs(str1, str2):
+    n = len(str1)
+    m = len(str2)
+    memo = [[0] * (m + 1) for _ in range(n + 1)]
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+            if str1[i - 1] == str2[j - 1]:
+                memo[i][j] = 1 + memo[i - 1][j - 1]
+            else:
+                memo[i][j] = max(
+                    memo[i][j - 1],
+                    memo[i - 1][j]
+                )
+    return memo[i][j]
+```
+Construct Solution
+```python
+def reconstruct_lcs(str1, str2, memo):
+    lcs_result = []
+    i, j = n, m
+    while i > 0 and j > 0:
+        if str1[i - 1] == str2[j - 1]:
+            lcs_result.append(str1[i - 1])
+            i -= 1
+            j -= 1
+        elif memo[i - 1][j] > memo[i][j - 1]:
+            i -= 1
+        else:
+            j -= 1
+    return ''.join(reversed(lcs_result))
+```
