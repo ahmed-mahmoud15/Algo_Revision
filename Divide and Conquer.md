@@ -61,6 +61,67 @@ def random_partition(A, p, r):
     A[i + 1], A[r] = A[r], A[i + 1]
     return i + 1
 ```
+### Random Select
+Average Case: T(n) = T(n / 2) + n --> O(n)<br>
+Worst Case: T(n) = T(n -1) + T(0) + n --> O(n<sup>2</sup>)
+```python
+def select(A, p, r, i):
+    # check if i in the range
+    if i < 1 or i > r - p + 1:
+        return math.inf
+
+    if p == r:
+        return A[p]
+
+    q = random_partition(A, p, r)
+    k = q - p + 1
+
+    if i == k:
+        return A[q]
+
+    if i < k:
+        return select(A, p, q - 1, i)
+    else:
+        return select(A, q + 1, r, i - k)
+```
+### Median of Medians
+```python
+def median_of_medians(A, p, r, i):
+
+    if r - p + 1 <= 5:
+        A[p:r + 1] = sorted(A[p:r + 1])
+        return A[p + i - 1]
+
+    medians = []
+    for j in range(p, r + 1, 5):
+        sub_right = min(j + 4, r)
+        sublist = sorted(A[j:sub_right + 1])
+        medians.append(sublist[len(sublist) // 2])
+
+    medians_length = len(medians)
+    median_of_medians_value = median_of_medians(medians, 0, medians_length - 1, (medians_length // 2) + 1)
+
+    pivot_index = A[p:r+1].index(median_of_medians_value)
+
+    # partitioning
+    A[pivot_index], A[r] = A[r], A[pivot_index]
+    x = A[r]
+    q = p - 1
+    for j in range(p, r):
+        if A[j] <= x:
+            q += 1
+            A[q], A[j] = A[j], A[q]
+    q += 1
+    A[q], A[r] = A[r], A[q]
+
+    k = q - p + 1
+    if i == k:
+        return A[q]
+    elif i < k:
+        return median_of_medians(A, p, q - 1, i)
+    else:
+        return median_of_medians(A, q + 1, r, i - k)
+```
 ## Binary Search
 T(n) = T(n / 2) + 1  --> O(log n)
 
